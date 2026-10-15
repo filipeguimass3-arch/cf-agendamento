@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111111">
+<title>Painel Administrativo | CF Barbearia</title>
+<style>
+:root{--bg:#101010;--panel:#191919;--soft:#222;--gold:#c9a15b;--gold2:#e7c989;--text:#f5f2ec;--muted:#aaa49a;--line:#ffffff16;--green:#6bc49a;--red:#e07b73}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#29231a 0,var(--bg) 45%);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.wrap{max-width:1250px;width:calc(100% - 32px);margin:auto;padding:24px 0 45px}.brand{display:flex;align-items:center;gap:13px}.logo{width:51px;height:51px;border:1px solid var(--gold);border-radius:13px;display:grid;place-items:center;color:var(--gold2);font:800 15px Georgia,serif;background:#211c14}.brand-name{font:24px Georgia,serif;letter-spacing:1px}.brand-sub{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-top:4px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:27px}.top-right{display:flex;gap:9px;align-items:center}.muted{color:var(--muted)}.eyebrow{color:var(--gold2);font-size:11px;text-transform:uppercase;letter-spacing:2px;font-weight:750}h1{font:500 clamp(28px,4vw,39px) Georgia,serif;margin:8px 0}h2{font-size:16px;margin:0 0 18px}.intro{color:var(--muted);line-height:1.6;margin:0 0 24px;font-size:14px}
+.btn{border:1px solid #494237;background:#24211c;color:var(--text);padding:11px 14px;border-radius:10px;font-weight:700;font-size:12px}.btn:hover{border-color:var(--gold)}.btn.primary{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#17130d;border:0}.btn.danger{border-color:#633633;color:#f0aaa4;background:#2c1918}.btn:disabled{opacity:.45;cursor:not-allowed}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:20px}.stat,.card{background:#191919ed;border:1px solid var(--line);border-radius:17px;padding:19px;box-shadow:0 15px 35px #0002}.stat-label{font-size:12px;color:var(--muted)}.stat-value{font:30px Georgia,serif;margin-top:9px;color:var(--gold2)}.stat-note{font-size:11px;color:var(--muted);margin-top:4px}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:13px;margin-bottom:3px}.tab{white-space:nowrap;border:1px solid var(--line);background:#171717;color:#bdb6ab;border-radius:10px;padding:11px 14px;font-weight:700;font-size:12px}.tab.active{background:#c9a15b19;border-color:var(--gold);color:var(--gold2)}
+.panel{display:none}.panel.active{display:block}.card{margin-bottom:17px}.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}.card-head h2{margin:0}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field.full{grid-column:1/-1}.field label{display:block;color:#d5cec3;font-size:12px;font-weight:700;margin-bottom:7px}.field input,.field select,.field textarea{width:100%;background:#111;color:var(--text);border:1px solid #3a3731;border-radius:10px;padding:12px;outline:none;min-height:43px}.field textarea{min-height:85px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px #c9a15b20}.field input[type=date],.field input[type=time]{color-scheme:dark}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}.hint{font-size:12px;line-height:1.6;color:var(--muted);margin:10px 0 0}.notice{border:1px solid #c9a15b38;background:#c9a15b12;color:#e6d2a8;padding:12px 14px;border-radius:11px;font-size:12px;line-height:1.6;margin-bottom:16px}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:680px}th,td{text-align:left;padding:13px 10px;border-bottom:1px solid var(--line);font-size:12px;vertical-align:middle}th{color:var(--muted);font-weight:650}td{color:#e9e4da}.pill{display:inline-block;padding:5px 8px;border-radius:99px;font-size:10px;font-weight:800;background:#25231f;color:var(--gold2)}.pill.ok{background:#163327;color:#9ce0bb}.pill.off{background:#351c1b;color:#f0aaa4}.empty{padding:25px;text-align:center;color:var(--muted);font-size:13px}
+.login-shell{max-width:450px;margin:7vh auto;padding:0 16px}.login-card{background:#191919;border:1px solid var(--line);border-radius:20px;padding:25px;box-shadow:0 20px 55px #0005}.login-card .brand{margin-bottom:25px}.message{display:none;padding:12px;border-radius:10px;font-size:12px;line-height:1.5;margin-top:13px}.message.show{display:block}.message.error{background:#351c1b;color:#f0aaa4;border:1px solid #633633}.message.success{background:#163327;color:#a9e6c5;border:1px solid #285b42}
+.footer{text-align:center;color:#706a61;font-size:11px;margin-top:25px}
+.notification-list{display:grid;gap:10px}.notification-item{display:flex;align-items:flex-start;gap:12px;padding:13px;border:1px solid var(--line);border-radius:12px;background:#151515}.notification-dot{width:9px;height:9px;border-radius:50%;background:var(--gold2);margin-top:5px;flex:0 0 auto}.notification-item strong{display:block;font-size:13px;margin-bottom:4px}.notification-item p{font-size:12px;color:var(--muted);line-height:1.5;margin:0}.notification-count{display:inline-grid;place-items:center;min-width:19px;height:19px;padding:0 5px;border-radius:99px;background:var(--red);color:white;font-size:10px;margin-left:5px}.link-row{display:flex;gap:9px}.link-row input{flex:1;min-width:0;background:#111;color:var(--text);border:1px solid #3a3731;border-radius:10px;padding:12px}.tab-badge{display:inline-block;margin-left:5px;padding:2px 6px;border-radius:99px;background:#3b2a14;color:var(--gold2);font-size:10px}
+@media(max-width:560px){.link-row{flex-direction:column}.link-row .btn{width:100%}}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.top{align-items:flex-start}.top-right{flex-direction:column;align-items:stretch}}
+@media(max-width:560px){.wrap{width:calc(100% - 22px);padding-top:16px}.top{flex-direction:column}.top-right{flex-direction:row;width:100%}.top-right .btn{flex:1}.brand-name{font-size:21px}.grid{gap:9px}.stat{padding:14px}.stat-value{font-size:26px}.card{padding:15px;border-radius:14px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.tabs{margin-right:-2px}.intro{font-size:13px}}
+</style>
+</head>
+<body>
+<section id="loginView" class="login-shell">
+  <div class="login-card">
+    <div class="brand"><div class="logo">CF<br>BAR</div><div><div class="brand-name">CF BARBEARIA</div><div class="brand-sub">Painel de gestão</div></div></div>
+    <div class="eyebrow">Área restrita</div><h1 style="font-size:31px">Acesso administrativo</h1>
+    <p class="intro">Entre com o usuário administrador cadastrado no Supabase.</p>
+    <div class="field" style="margin-bottom:13px"><label for="loginEmail">E-mail</label><input id="loginEmail" type="email" autocomplete="username" placeholder="admin@seudominio.com"></div>
+    <div class="field"><label for="loginPassword">Senha</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Sua senha"></div>
+    <button id="loginBtn" class="btn primary" style="width:100%;margin-top:17px">Entrar no painel</button>
+    <div id="loginMessage" class="message" role="status"></div>
+    <p class="hint">Configure a URL e a chave pública (anon/publishable) do seu projeto Supabase no código antes de usar.</p>
+  </div>
+</section>
+
+<div id="adminView" class="wrap hidden">
+  <header class="top">
+    <div class="brand"><div class="logo">CF<br>BAR</div><div><div class="brand-name">CF BARBEARIA</div><div class="brand-sub">Painel de gestão</div></div></div>
+    <div class="top-right"><button class="btn" id="refreshBtn">Atualizar dados</button><button class="btn" id="logoutBtn">Sair</button></div>
+  </header>
+  <div class="eyebrow">Visão geral</div><h1>Gestão da agenda</h1>
+  <p class="intro">Gerencie reservas, bloqueios de horários e períodos de férias dos profissionais.</p>
+  <div class="notice"><strong>Atenção:</strong> este painel usa Supabase. Depois de configurar as credenciais e executar o SQL fornecido, você poderá cadastrar bloqueios e reservas. A página pública de agendamento também precisa gravar e consultar as mesmas tabelas para compartilhar a agenda em tempo real.</div>
+  <section class="grid">
+    <div class="stat"><div class="stat-label">Reservas hoje</div><div id="statToday" class="stat-value">—</div><div class="stat-note">Agendamentos registrados</div></div>
+    <div class="stat"><div class="stat-label">Próximas reservas</div><div id="statUpcoming" class="stat-value">—</div><div class="stat-note">A partir de hoje</div></div>
+    <div class="stat"><div class="stat-label">Bloqueios ativos</div><div id="statBlocks" class="stat-value">—</div><div class="stat-note">Períodos cadastrados</div></div>
+    <div class="stat"><div class="stat-label">Faturamento previsto hoje</div><div id="statRevenue" class="stat-value">—</div><div class="stat-note">Soma das reservas de hoje</div></div>
+  </section>
+
+  <nav class="tabs" aria-label="Seções administrativas">
+    <button class="tab active" data-tab="bookings">Reservas</button>
+    <button class="tab" data-tab="reserve">Reservar horário</button>
+    <button class="tab" data-tab="blocks">Folgas / férias</button>
+    <button class="tab" data-tab="notifications">Notificações <span id="notificationBadge" class="tab-badge hidden">0</span></button>
+    <button class="tab" data-tab="bookingLink">Link de agendamento</button>
+  </nav>
+
+  <section id="panel-bookings" class="panel active">
+    <div class="card">
+      <div class="card-head"><h2>Reservas cadastradas</h2><div class="field" style="min-width:150px"><select id="bookingFilter" aria-label="Filtrar reservas"><option value="all">Todas as reservas</option><option value="upcoming">Futuras</option><option value="today">Hoje</option><option value="cancelled">Canceladas</option></select></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Data / hora</th><th>Cliente</th><th>Serviço</th><th>Profissional</th><th>Valor</th><th>Status</th><th>Ações</th></tr></thead><tbody id="bookingRows"><tr><td colspan="7" class="empty">Carregando reservas…</td></tr></tbody></table></div>
+      <p class="hint">As reservas criadas manualmente aparecem aqui junto das reservas enviadas pelo site, quando a página pública estiver conectada à mesma tabela.</p>
+    </div>
+  </section>
+
+  <section id="panel-reserve" class="panel">
+    <div class="card">
+      <h2>Registrar reserva manual</h2>
+      <p class="hint" style="margin-top:-8px;margin-bottom:17px">Use para encaixes, clientes que agendaram presencialmente ou reservas feitas por telefone. Os intervalos de almoço padrão serão respeitados.</p>
+      <form id="reserveForm">
+        <div class="form-grid">
+          <div class="field"><label for="rName">Nome do cliente *</label><input id="rName" required maxlength="100" placeholder="Nome completo"></div>
+          <div class="field"><label for="rPhone">Telefone</label><input id="rPhone" type="tel" maxlength="30" placeholder="(38) 99999-9999"></div>
+          <div class="field"><label for="rProfessional">Profissional *</label><select id="rProfessional" required><option>Alisson</option><option>Caio</option></select></div>
+          <div class="field"><label for="rService">Serviço *</label><select id="rService" required>
+            <option value="Corte social" data-price="30">Corte social — R$ 30,00</option>
+            <option value="Corte degradê" data-price="30">Corte degradê — R$ 30,00</option>
+            <option value="Corte social + barba" data-price="40">Corte social + barba — R$ 40,00</option>
+            <option value="Corte degradê + barba" data-price="45">Corte degradê + barba — R$ 45,00</option>
+            <option value="Barba normal" data-price="15">Barba normal — R$ 15,00</option>
+            <option value="Barboterapia" data-price="20">Barboterapia — R$ 20,00</option>
+            <option value="Sobrancelha" data-price="10">Sobrancelha — R$ 10,00</option>
+            <option value="Pezinho" data-price="10">Pezinho — R$ 10,00</option>
+          </select></div>
+          <div class="field"><label for="rDate">Data *</label><input id="rDate" type="date" required></div>
+          <div class="field"><label for="rTime">Horário *</label><select id="rTime" required><option value="">Escolha a data e o profissional</option></select></div>
+          <div class="field full"><label for="rNotes">Observações</label><textarea id="rNotes" placeholder="Observações opcionais"></textarea></div>
+        </div>
+        <div class="actions"><button class="btn primary" type="submit">Salvar reserva</button></div>
+      </form>
+      <div id="reserveMessage" class="message" role="status"></div>
+    </div>
+  </section>
+
+  <section id="panel-blocks" class="panel">
+    <div class="card">
+      <h2>Criar bloqueio de agenda</h2>
+      <p class="hint" style="margin-top:-8px;margin-bottom:17px">Bloqueie um horário específico, um período do dia, um dia inteiro ou vários dias de férias. Bloqueios de profissional específico não afetam o outro barbeiro.</p>
+      <form id="blockForm">
+        <div class="form-grid">
+          <div class="field"><label for="bScope">Aplicar bloqueio a *</label><select id="bScope"><option value="Alisson">Somente Alisson</option><option value="Caio">Somente Caio</option><option value="Todos">Todos os profissionais</option></select></div>
+          <div class="field"><label for="bType">Tipo de bloqueio *</label><select id="bType"><option value="time">Período de horário</option><option value="day">Folga / dia inteiro</option><option value="vacation">Férias ou folga por vários dias</option></select></div>
+          <div class="field"><label for="bStartDate">Data inicial *</label><input id="bStartDate" type="date" required></div>
+          <div class="field" id="bEndDateWrap"><label for="bEndDate">Data final *</label><input id="bEndDate" type="date" required></div>
+          <div class="field" id="bStartTimeWrap"><label for="bStartTime">Início *</label><input id="bStartTime" type="time" value="09:00" required></div>
+          <div class="field" id="bEndTimeWrap"><label for="bEndTime">Fim *</label><input id="bEndTime" type="time" value="19:00" required></div>
+          <div class="field full"><label for="bReason">Motivo / descrição *</label><input id="bReason" required maxlength="150" placeholder="Ex.: férias, compromisso, manutenção"></div>
+        </div>
+        <div class="actions"><button class="btn primary" type="submit">Salvar bloqueio</button></div>
+      </form>
+      <div id="blockMessage" class="message" role="status"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Bloqueios cadastrados</h2><span class="pill">Gerenciáveis</span></div>
+      <div class="table-wrap"><table><thead><tr><th>Período</th><th>Profissional</th><th>Horário</th><th>Motivo</th><th>Ação</th></tr></thead><tbody id="blockRows"><tr><td colspan="5" class="empty">Carregando bloqueios…</td></tr></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="panel-notifications" class="panel">
+    <div class="card">
+      <div class="card-head">
+        <h2>Notificações de agendamentos</h2>
+        <button class="btn" id="enableNotificationsBtn" type="button">Ativar avisos do navegador</button>
+      </div>
+      <p class="hint" style="margin-top:-8px;margin-bottom:16px">O painel verifica novos agendamentos enquanto estiver aberto. Os avisos do navegador dependem da permissão concedida neste dispositivo.</p>
+      <div id="notificationPermission" class="notice">As notificações dentro do painel ficam disponíveis enquanto ele estiver aberto.</div>
+      <div id="notificationList" class="notification-list"><div class="empty">Nenhuma notificação nova nesta sessão.</div></div>
+      <div class="actions"><button class="btn" id="clearNotificationsBtn" type="button">Limpar avisos desta sessão</button></div>
+    </div>
+  </section>
+
+  <section id="panel-bookingLink" class="panel">
+    <div class="card">
+      <h2>Link público de agendamento</h2>
+      <p class="hint" style="margin-top:-8px;margin-bottom:17px">Cole o endereço publicado da página de agendamento dos clientes. O endereço ficará salvo neste navegador para você copiar ou abrir quando precisar.</p>
+      <div class="field">
+        <label for="publicBookingUrl">Link da página de agendamento</label>
+        <input id="publicBookingUrl" type="url" placeholder="https://seu-site.vercel.app">
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="saveBookingLinkBtn" type="button">Salvar link</button>
+        <button class="btn" id="copyBookingLinkBtn" type="button">Copiar link</button>
+        <button class="btn" id="openBookingLinkBtn" type="button">Abrir página</button>
+      </div>
+      <div id="bookingLinkMessage" class="message" role="status"></div>
+      <p class="hint">Observação: esse campo organiza e copia o endereço; ele não publica o site automaticamente. Use o link público que você recebeu ao publicar o index.html.</p>
+    </div>
+  </section>
+
+  <div id="globalMessage" class="message" role="status"></div>
+  <footer class="footer">CF BARBEARIA • Painel administrativo</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* COLOQUE AQUI A URL E A CHAVE PUBLICÁVEL (anon/publishable) DO SEU PROJETO SUPABASE.
+   Nunca coloque a service_role key em HTML público. */
+const SUPABASE_URL = "https://ankuotgjhxnbycmdwiwq.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_rumsXspq3my0TuW0Jy6Zeg_R8a_C0lV";
+let supabaseClient = null;
+let allBookings = [];
+let allBlocks = [];
+let knownBookingIds = new Set();
+let hasLoadedBookings = false;
+let notifications = [];
+const $ = id => document.getElementById(id);
+const servicePrices = {"Corte social":30,"Corte degradê":30,"Corte social + barba":40,"Corte degradê + barba":45,"Barba normal":15,"Barboterapia":20,"Sobrancelha":10,"Pezinho":10};
+const todayISO = () => { const d = new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); };
+const escapeHTML = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = n => Number(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const dateBR = s => s ? s.split("-").reverse().join("/") : "—";
+function showMessage(id,text,type="success"){const el=$(id);el.textContent=text;el.className="message show "+type;}
+function clearMessage(id){const el=$(id);el.className="message";el.textContent="";}
+function configured(){return SUPABASE_URL.startsWith("https://") && !SUPABASE_URL.includes("COLE_AQUI") && SUPABASE_ANON_KEY.length>20 && !SUPABASE_ANON_KEY.includes("COLE_AQUI");}
+function professionalUnavailable(professional, time){
+  const m=Number(time.slice(0,2))*60+Number(time.slice(3,5));
+  if(professional==="Alisson" && m>=660 && m<780)return true; // 11:00–13:00
+  if(professional==="Caio" && m>=720 && m<840)return true; // 12:00–14:00
+  return false;
+}
+function setDefaultDates(){["rDate","bStartDate","bEndDate"].forEach(id=>{$(id).min=todayISO();});$("rDate").value=todayISO();$("bStartDate").value=todayISO();$("bEndDate").value=todayISO();}
+function updateBlockFields(){
+  const type=$("bType").value, multi=type==="vacation", day=type==="day";
+  $("bEndDateWrap").classList.toggle("hidden",!multi);
+  $("bEndDate").required=multi;
+  $("bStartTimeWrap").classList.toggle("hidden",day);
+  $("bEndTimeWrap").classList.toggle("hidden",day);
+  $("bStartTime").required=!day;$("bEndTime").required=!day;
+  if(!multi)$("bEndDate").value=$("bStartDate").value;
+}
+function switchTab(name){
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active",p.id==="panel-"+name));
+}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
+$("bType").addEventListener("change",updateBlockFields);
+$("bStartDate").addEventListener("change",()=>{if($("bType").value!=="vacation")$("bEndDate").value=$("bStartDate").value;});
+$("rProfessional").addEventListener("change",loadAvailableTimes);
+$("rDate").addEventListener("change",loadAvailableTimes);
+$("rService").addEventListener("change",()=>{});
+$("bookingFilter").addEventListener("change",renderBookings);
+$("enableNotificationsBtn").addEventListener("click",enableBrowserNotifications);
+$("clearNotificationsBtn").addEventListener("click",clearNotifications);
+$("saveBookingLinkBtn").addEventListener("click",saveBookingLink);
+$("copyBookingLinkBtn").addEventListener("click",copyBookingLink);
+$("openBookingLinkBtn").addEventListener("click",openBookingLink);
+
+
+function addNotification(booking){
+  const item={
+    id:String(booking.id ?? (Date.now()+"-"+Math.random())),
+    title:"Novo agendamento recebido",
+    detail:`${booking.customer_name||"Cliente"} • ${booking.service||"Serviço"} • ${dateBR(booking.booking_date)} às ${String(booking.booking_time||"").slice(0,5)} • ${booking.professional||"Profissional não informado"}`,
+    createdAt:new Date()
+  };
+  notifications.unshift(item);
+  notifications=notifications.slice(0,50);
+  renderNotifications();
+  if("Notification" in window && Notification.permission==="granted"){
+    try{new Notification("CF BARBEARIA — Novo agendamento",{body:item.detail});}catch(_){}
+  }
+}
+function renderNotifications(){
+  const badge=$("notificationBadge");
+  badge.textContent=String(notifications.length);
+  badge.classList.toggle("hidden",notifications.length===0);
+  $("notificationList").innerHTML=notifications.length?notifications.map(n=>`
+    <div class="notification-item"><span class="notification-dot"></span><div><strong>${escapeHTML(n.title)}</strong><p>${escapeHTML(n.detail)}</p><p style="margin-top:5px">${escapeHTML(n.createdAt.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}))}</p></div></div>
+  `).join(""):'<div class="empty">Nenhuma notificação nova nesta sessão.</div>';
+}
+function clearNotifications(){notifications=[];renderNotifications();}
+async function enableBrowserNotifications(){
+  if(!("Notification" in window)){
+    showMessage("notificationPermission","Este navegador não oferece suporte a notificações do sistema. Os avisos continuarão aparecendo dentro do painel.","error");return;
+  }
+  try{
+    const permission=await Notification.requestPermission();
+    updateNotificationPermission();
+    if(permission==="granted")showMessage("notificationPermission","Avisos do navegador ativados neste dispositivo.","success");
+    else showMessage("notificationPermission","Permissão não concedida. Você ainda pode ver os avisos dentro do painel.","error");
+  }catch(_){showMessage("notificationPermission","Não foi possível solicitar a permissão neste navegador.","error");}
+}
+function updateNotificationPermission(){
+  if(!("Notification" in window)){$("notificationPermission").textContent="Este navegador não oferece notificações do sistema; os avisos internos continuam disponíveis.";return;}
+  const p=Notification.permission;
+  $("notificationPermission").textContent=p==="granted"?"Avisos do navegador ativados neste dispositivo.":p==="denied"?"O navegador bloqueou os avisos. Altere a permissão nas configurações do site se quiser ativá-los.":"Clique em “Ativar avisos do navegador” e permita as notificações quando o navegador perguntar.";
+}
+function loadSavedBookingLink(){
+  try{$("publicBookingUrl").value=localStorage.getItem("cf_barbearia_public_booking_url")||"";}catch(_){}
+}
+function validBookingLink(){
+  const value=$("publicBookingUrl").value.trim();
+  if(!value){showMessage("bookingLinkMessage","Cole primeiro o link público da página de agendamento.","error");return "";}
+  try{const url=new URL(value);if(url.protocol!=="https:"&&url.protocol!=="http:")throw new Error();return url.href;}
+  catch(_){showMessage("bookingLinkMessage","Informe um endereço válido começando com https:// ou http://.","error");return "";}
+}
+function saveBookingLink(){
+  const url=validBookingLink();if(!url)return;
+  try{localStorage.setItem("cf_barbearia_public_booking_url",url);showMessage("bookingLinkMessage","Link salvo neste navegador.","success");}
+  catch(_){showMessage("bookingLinkMessage","Não foi possível salvar neste navegador. Você ainda pode copiar o link.","error");}
+}
+async function copyBookingLink(){
+  const url=validBookingLink();if(!url)return;
+  try{
+    if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(url);
+    else{$("publicBookingUrl").focus();$("publicBookingUrl").select();if(!document.execCommand("copy"))throw new Error("copy");}
+    showMessage("bookingLinkMessage","Link copiado. Agora você pode colá-lo onde quiser compartilhar.","success");
+  }catch(_){showMessage("bookingLinkMessage","Não foi possível copiar automaticamente. Selecione o link no campo e copie manualmente.","error");}
+}
+function openBookingLink(){
+  const url=validBookingLink();if(!url)return;
+  window.open(url,"_blank","noopener,noreferrer");
+}
+
+async function initialize(){
+  if(!configured()){
+    showMessage("loginMessage","Antes de entrar, edite o arquivo e preencha SUPABASE_URL e SUPABASE_ANON_KEY com os dados do projeto Supabase.","error");
+    $("loginBtn").disabled=true;return;
+  }
+  supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(session)showAdmin();else $("loginBtn").disabled=false;
+}
+async function login(){
+  clearMessage("loginMessage");
+  if(!supabaseClient){showMessage("loginMessage","Configure a URL e a chave do Supabase no código primeiro.","error");return;}
+  $("loginBtn").disabled=true;
+  const {error}=await supabaseClient.auth.signInWithPassword({email:$("loginEmail").value.trim(),password:$("loginPassword").value});
+  $("loginBtn").disabled=false;
+  if(error){showMessage("loginMessage","Não foi possível entrar. Confira e-mail, senha e se o usuário foi criado no Supabase Auth. Detalhe: "+error.message,"error");return;}
+  showAdmin();
+}
+$("loginBtn").addEventListener("click",login);
+$("loginPassword").addEventListener("keydown",e=>{if(e.key==="Enter")login();});
+async function logout(){if(supabaseClient)await supabaseClient.auth.signOut();$("adminView").classList.add("hidden");$("loginView").classList.remove("hidden");}
+$("logoutBtn").addEventListener("click",logout);
+async function showAdmin(){
+  $("loginView").classList.add("hidden");$("adminView").classList.remove("hidden");
+  setDefaultDates();updateBlockFields();loadSavedBookingLink();await refreshData();await loadAvailableTimes();
+  updateNotificationPermission();
+  if(!window.__cfBookingRefreshTimer) window.__cfBookingRefreshTimer=setInterval(()=>{if(supabaseClient && !$("adminView").classList.contains("hidden"))refreshData();},30000);
+}
+$("refreshBtn").addEventListener("click",refreshData);
+async function refreshData(){
+  if(!supabaseClient)return;
+  const [b,bl]=await Promise.all([
+    supabaseClient.from("bookings").select("*").order("booking_date",{ascending:true}).order("booking_time",{ascending:true}),
+    supabaseClient.from("blocked_periods").select("*").order("start_date",{ascending:true})
+  ]);
+  if(b.error||bl.error){
+    const err=(b.error||bl.error).message;
+    showMessage("globalMessage","Erro ao carregar dados. Confira se executou o SQL de configuração e as políticas RLS. "+err,"error");
+    $("bookingRows").innerHTML='<tr><td colspan="7" class="empty">Não foi possível carregar reservas.</td></tr>';
+    $("blockRows").innerHTML='<tr><td colspan="5" class="empty">Não foi possível carregar bloqueios.</td></tr>';
+    return;
+  }
+  const incomingBookings=b.data||[];
+  if(!hasLoadedBookings){
+    knownBookingIds=new Set(incomingBookings.map(x=>String(x.id)));
+    hasLoadedBookings=true;
+  }else{
+    const fresh=incomingBookings.filter(x=>x.id!=null&&!knownBookingIds.has(String(x.id)));
+    fresh.forEach(x=>{
+      knownBookingIds.add(String(x.id));
+      addNotification(x);
+    });
+  }
+  allBookings=incomingBookings;allBlocks=bl.data||[];renderBookings();renderBlocks();renderStats();await loadAvailableTimes();clearMessage("globalMessage");
+}
+function bookingStatus(b){return b.status||"confirmado";}
+function renderBookings(){
+  const filter=$("bookingFilter").value, today=todayISO();
+  let rows=allBookings.filter(b=>{
+    if(filter==="today")return b.booking_date===today&&bookingStatus(b)!=="cancelado";
+    if(filter==="upcoming")return b.booking_date>=today&&bookingStatus(b)!=="cancelado";
+    if(filter==="cancelled")return bookingStatus(b)==="cancelado";
+    return true;
+  });
+  rows.sort((a,b)=>(a.booking_date+a.booking_time).localeCompare(b.booking_date+b.booking_time));
+  $("bookingRows").innerHTML=rows.length?rows.map(b=>`<tr>
+    <td>${dateBR(b.booking_date)}<br><strong>${escapeHTML(String(b.booking_time||"").slice(0,5))}</strong></td>
+    <td>${escapeHTML(b.customer_name||"—")}<br><span class="muted">${escapeHTML(b.phone||"")}</span></td>
+    <td>${escapeHTML(b.service||"—")}</td><td>${escapeHTML(b.professional||"—")}</td>
+    <td>${money(b.price)}</td><td><span class="pill ${bookingStatus(b)==="cancelado"?"off":"ok"}">${escapeHTML(bookingStatus(b))}</span></td>
+    <td>${bookingStatus(b)==="cancelado"?"—":`<button class="btn danger" data-cancel="${escapeHTML(b.id)}">Cancelar</button>`}</td></tr>`).join(""):'<tr><td colspan="7" class="empty">Nenhuma reserva neste filtro.</td></tr>';
+  $("bookingRows").querySelectorAll("[data-cancel]").forEach(btn=>btn.addEventListener("click",()=>cancelBooking(btn.dataset.cancel)));
+}
+async function cancelBooking(id){
+  if(!confirm("Deseja cancelar esta reserva?"))return;
+  const {error}=await supabaseClient.from("bookings").update({status:"cancelado"}).eq("id",id);
+  if(error){showMessage("globalMessage","Não foi possível cancelar: "+error.message,"error");return;}
+  await refreshData();showMessage("globalMessage","Reserva cancelada.","success");
+}
+function renderBlocks(){
+  const rows=allBlocks.filter(b=>b.active!==false);
+  $("blockRows").innerHTML=rows.length?rows.map(b=>`<tr>
+    <td>${dateBR(b.start_date)}${b.end_date&&b.end_date!==b.start_date?" a "+dateBR(b.end_date):""}</td>
+    <td>${escapeHTML(b.professional_scope||"Todos")}</td>
+    <td>${b.all_day?"Dia inteiro":escapeHTML(String(b.start_time||"").slice(0,5)+"–"+String(b.end_time||"").slice(0,5))}</td>
+    <td>${escapeHTML(b.reason||"Bloqueio")}</td>
+    <td><button class="btn danger" data-unblock="${escapeHTML(b.id)}">Remover</button></td></tr>`).join(""):'<tr><td colspan="5" class="empty">Nenhum bloqueio ativo.</td></tr>';
+  $("blockRows").querySelectorAll("[data-unblock]").forEach(btn=>btn.addEventListener("click",()=>deleteBlock(btn.dataset.unblock)));
+}
+async function deleteBlock(id){
+  if(!confirm("Remover este bloqueio da agenda?"))return;
+  const {error}=await supabaseClient.from("blocked_periods").delete().eq("id",id);
+  if(error){showMessage("globalMessage","Não foi possível remover: "+error.message,"error");return;}
+  await refreshData();showMessage("globalMessage","Bloqueio removido.","success");
+}
+function renderStats(){
+  const today=todayISO(), valid=allBookings.filter(b=>bookingStatus(b)!=="cancelado");
+  $("statToday").textContent=valid.filter(b=>b.booking_date===today).length;
+  $("statUpcoming").textContent=valid.filter(b=>b.booking_date>=today).length;
+  $("statBlocks").textContent=allBlocks.filter(b=>b.active!==false&&(!b.end_date||b.end_date>=today)).length;
+  $("statRevenue").textContent=money(valid.filter(b=>b.booking_date===today).reduce((sum,b)=>sum+Number(b.price||0),0));
+}
+function timeOptions(){let a=[];for(let m=540;m<1140;m+=20)a.push(String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0"));return a;}
+async function loadAvailableTimes(){
+  const date=$("rDate").value, pro=$("rProfessional").value, sel=$("rTime"), old=sel.value;
+  if(!date||!supabaseClient){sel.innerHTML='<option value="">Escolha a data</option>';return;}
+  sel.innerHTML='<option value="">Carregando horários…</option>';
+  const [b,bl]=await Promise.all([
+    supabaseClient.from("bookings").select("booking_time,status").eq("booking_date",date).eq("professional",pro).neq("status","cancelado"),
+    supabaseClient.from("blocked_periods").select("*").eq("active",true).lte("start_date",date).gte("end_date",date)
+  ]);
+  if(b.error||bl.error){sel.innerHTML='<option value="">Erro ao carregar horários</option>';return;}
+  const booked=new Set((b.data||[]).map(x=>String(x.booking_time).slice(0,5)));
+  const blocks=bl.data||[];
+  sel.innerHTML='<option value="">Selecione um horário</option>';
+  timeOptions().forEach(t=>{
+    const mins=Number(t.slice(0,2))*60+Number(t.slice(3,5));
+    let blocked=professionalUnavailable(pro,t)||booked.has(t);
+    let reason=professionalUnavailable(pro,t)?"Indisponível — intervalo padrão":"";
+    blocks.forEach(x=>{
+      const scope=x.professional_scope||"Todos";
+      const applies=scope==="Todos"||scope===pro;
+      if(applies){
+        if(x.all_day) {blocked=true;reason=x.reason||"Bloqueado";}
+        else if(mins>=Number(String(x.start_time||"00:00").slice(0,2))*60+Number(String(x.start_time||"00:00").slice(3,5)) && mins<Number(String(x.end_time||"23:59").slice(0,2))*60+Number(String(x.end_time||"23:59").slice(3,5))){blocked=true;reason=x.reason||"Bloqueado";}
+      }
+    });
+    const opt=document.createElement("option");opt.value=t;opt.textContent=t+(blocked?" — indisponível":"");opt.disabled=blocked;opt.title=reason;sel.appendChild(opt);
+  });
+  if(old&&[...sel.options].some(o=>o.value===old&&!o.disabled))sel.value=old;
+}
+$("reserveForm").addEventListener("submit",async e=>{
+  e.preventDefault();clearMessage("reserveMessage");
+  const service=$("rService").value, price=Number($("rService").selectedOptions[0].dataset.price), pro=$("rProfessional").value, date=$("rDate").value,time=$("rTime").value;
+  if(!time){showMessage("reserveMessage","Selecione um horário disponível.","error");return;}
+  if(professionalUnavailable(pro,time)){showMessage("reserveMessage","Esse horário faz parte do intervalo indisponível padrão deste profissional.","error");return;}
+  const payload={customer_name:$("rName").value.trim(),phone:$("rPhone").value.trim(),professional:pro,service,price,booking_date:date,booking_time:time,status:"confirmado",notes:$("rNotes").value.trim(),source:"admin"};
+  const btn=e.submitter;btn.disabled=true;
+  const {error}=await supabaseClient.from("bookings").insert(payload);
+  btn.disabled=false;
+  if(error){showMessage("reserveMessage","Não foi possível salvar a reserva. Pode haver conflito de horário ou erro de configuração. "+error.message,"error");return;}
+  e.target.reset();$("rDate").value=todayISO();await refreshData();showMessage("reserveMessage","Reserva registrada com sucesso.","success");switchTab("bookings");
+});
+$("blockForm").addEventListener("submit",async e=>{
+  e.preventDefault();clearMessage("blockMessage");
+  const type=$("bType").value,start=$("bStartDate").value,end=type==="vacation"?$("bEndDate").value:start;
+  const allDay=type==="day"||type==="vacation";
+  if(end<start){showMessage("blockMessage","A data final não pode ser anterior à data inicial.","error");return;}
+  if(!allDay&&$("bEndTime").value<=$("bStartTime").value){showMessage("blockMessage","O horário final deve ser posterior ao horário inicial.","error");return;}
+  const payload={professional_scope:$("bScope").value,start_date:start,end_date:end,start_time:allDay?null:$("bStartTime").value,end_time:allDay?null:$("bEndTime").value,all_day:allDay,reason:$("bReason").value.trim(),active:true};
+  const btn=e.submitter;btn.disabled=true;
+  const {error}=await supabaseClient.from("blocked_periods").insert(payload);
+  btn.disabled=false;
+  if(error){showMessage("blockMessage","Não foi possível salvar o bloqueio. Confira a configuração do Supabase. "+error.message,"error");return;}
+  e.target.reset();setDefaultDates();updateBlockFields();await refreshData();showMessage("blockMessage","Bloqueio cadastrado com sucesso.","success");
+});
+renderNotifications();
+initialize();
+</script>
+</body>
+</html>

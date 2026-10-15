@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111111">
+<title>Agendamento | CF Barbearia</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#101010;--panel:#191919;--gold:#c9a15b;--gold-light:#e7c989;--text:#f5f2ec;--muted:#aaa49a;--line:rgba(255,255,255,.09);--green:#6bc49a}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--text);background:radial-gradient(ellipse at top,#29231a 0,var(--bg) 48%);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select{font:inherit}.shell{width:min(1040px,calc(100% - 32px));margin:0 auto;padding:34px 0 48px}.brand{display:flex;align-items:center;gap:14px;margin-bottom:30px}.logo{width:58px;height:58px;border:1px solid var(--gold);border-radius:14px;display:grid;place-items:center;color:var(--gold-light);font-family:Georgia,serif;font-weight:800;font-size:17px;letter-spacing:-1px;background:linear-gradient(145deg,#282117,#111);box-shadow:0 8px 28px #0006}.brand-name{font-family:Georgia,"Times New Roman",serif;font-size:25px;letter-spacing:1.5px}.brand-sub{color:var(--gold);text-transform:uppercase;font-size:10px;letter-spacing:3px;margin-top:4px}.hero{margin-bottom:24px}.eyebrow{color:var(--gold-light);font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase}h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:clamp(30px,5vw,43px);margin:10px 0 8px}.intro{color:var(--muted);line-height:1.6;margin:0;max-width:600px}.layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:20px;align-items:start}.card{background:rgba(25,25,25,.94);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 18px 45px #0003}.section-title{display:flex;align-items:center;gap:11px;margin:0 0 18px;font-size:16px;font-weight:700}.number{display:grid;place-items:center;width:28px;height:28px;border-radius:9px;background:#c9a15b1b;color:var(--gold-light);font-size:12px}.field-label{display:block;color:#d6d0c6;font-size:12px;font-weight:650;margin:0 0 9px}input,select{width:100%;color:var(--text);background:#111;border:1px solid #393630;border-radius:11px;padding:13px 14px;outline:none}input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px #c9a15b20}input[type=date]{color-scheme:dark}.form-group{margin-bottom:21px}.professionals{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pro-option,.service-option{position:relative}.pro-option input,.service-option input{position:absolute;opacity:0;width:1px;height:1px}.pro-option label{display:flex;align-items:center;gap:11px;min-height:75px;padding:13px;border:1px solid #393630;border-radius:13px;cursor:pointer;background:#141414;transition:.18s}.pro-option input:checked+label,.service-option input:checked+label{border-color:var(--gold);background:#c9a15b12;box-shadow:inset 0 0 0 1px #c9a15b55}.avatar{width:39px;height:39px;display:grid;place-items:center;border-radius:50%;background:#302a20;color:var(--gold-light);font-weight:750}.pro-name{font-weight:700;font-size:13px}.pro-caption{display:block;color:var(--muted);font-size:11px;margin-top:4px}.notice{padding:12px 13px;border-radius:11px;background:#c9a15b12;border:1px solid #c9a15b36;color:#e6d2a8;font-size:12px;line-height:1.5;margin-top:12px}.services{display:grid;grid-template-columns:1fr 1fr;gap:9px}.service-option label{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:57px;padding:11px 12px;border:1px solid #393630;border-radius:11px;background:#141414;cursor:pointer;transition:.18s}.service-name{font-size:12px;line-height:1.35;color:#eee8de}.service-price{white-space:nowrap;color:var(--gold-light);font-weight:800;font-size:13px}.slots-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.slots-head .field-label{margin:0}.legend{display:flex;gap:12px;color:var(--muted);font-size:10px}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;background:var(--green)}.dot.off{background:#666}.slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.slot{min-height:43px;border-radius:10px;border:1px solid #393630;background:#141414;color:#e9e4da;cursor:pointer;transition:.16s;font-size:12px;font-weight:650}.slot:hover:not(:disabled){border-color:var(--gold)}.slot.selected{color:#17130d;background:var(--gold-light);border-color:var(--gold-light)}.slot:disabled{cursor:not-allowed;color:#77716a;background:#111;border-color:#272522;text-decoration:line-through;opacity:.65}.slots-empty{grid-column:1/-1;padding:18px;color:var(--muted);text-align:center;border:1px dashed #393630;border-radius:12px;font-size:13px}.summary{position:sticky;top:18px}.summary-top{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:18px}.summary-top h2{font-family:Georgia,serif;font-size:24px;font-weight:500;margin:0 0 7px}.summary-top p{color:var(--muted);font-size:12px;line-height:1.5;margin:0}.summary-line{display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}.summary-line span:first-child{color:var(--muted)}.summary-line strong{text-align:right;font-weight:650;overflow-wrap:anywhere}.summary-line .pending{color:var(--gold-light)}.submit{width:100%;margin-top:20px;border:0;border-radius:12px;padding:15px 16px;color:#17130d;background:linear-gradient(135deg,var(--gold-light),var(--gold));font-weight:800;cursor:pointer;transition:transform .15s,opacity .15s}.submit:hover{transform:translateY(-1px)}.submit:disabled{opacity:.4;cursor:not-allowed;transform:none}.fineprint{text-align:center;color:#8e887f;font-size:10px;line-height:1.5;margin:13px 0 0}.message{display:none;margin-top:15px;padding:13px;border-radius:11px;font-size:12px;line-height:1.5}.message.show{display:block}.message.success{background:#163327;color:#a9e6c5;border:1px solid #285b42}.message.error{background:#351c1b;color:#f2b0aa;border:1px solid #66302d}.contact-card{margin-top:20px}.contact-item{display:flex;align-items:flex-start;gap:11px;padding:11px 0;color:#ddd6ca;font-size:13px;line-height:1.5}.contact-item+.contact-item{border-top:1px solid var(--line)}.contact-item .icon-wrap{color:var(--gold-light);padding-top:1px}.contact-item a{color:var(--gold-light);text-decoration:none}.contact-item a:hover{text-decoration:underline}footer{text-align:center;color:#777168;font-size:11px;margin-top:30px;letter-spacing:.5px}
+@media(max-width:760px){.shell{width:min(100% - 22px,560px);padding-top:22px}.brand{margin-bottom:24px}.brand-name{font-size:21px}.layout{grid-template-columns:1fr}.card{padding:19px;border-radius:16px}.summary{position:static}.slots{grid-template-columns:repeat(3,minmax(0,1fr))}.hero{margin-bottom:20px}}
+@media(max-width:380px){.services{grid-template-columns:1fr}.slots{grid-template-columns:repeat(2,minmax(0,1fr))}.professionals{grid-template-columns:1fr}.legend{gap:7px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="brand"><div class="logo" aria-label="CF Barbearia">CF<br>BAR</div><div><div class="brand-name">CF BARBEARIA</div><div class="brand-sub">Estilo • Precisão • Cuidado</div></div></header>
+<section class="hero"><div class="eyebrow">Agendamento online</div><h1>Seu próximo corte começa aqui.</h1><p class="intro">Escolha o profissional, selecione o melhor horário e solicite seu agendamento de forma simples e rápida.</p></section>
+<main class="layout">
+<section class="card">
+<h2 class="section-title"><span class="number">00</span> Seus dados</h2>
+<div class="form-group"><label class="field-label" for="customerName">Nome completo</label><input type="text" id="customerName" name="customer_name" autocomplete="name" maxlength="100" placeholder="Digite seu nome" required></div>
+<div class="form-group"><label class="field-label" for="customerPhone">Telefone / WhatsApp</label><input type="tel" id="customerPhone" name="phone" autocomplete="tel" inputmode="tel" maxlength="16" placeholder="(38) 99999-9999" required></div>
+<h2 class="section-title"><span class="number">01</span> Escolha seu profissional</h2>
+<div class="form-group"><div class="professionals">
+<div class="pro-option"><input type="radio" id="alisson" name="professional" value="Alisson" checked><label for="alisson"><span class="avatar">A</span><span><span class="pro-name">Alisson</span><span class="pro-caption">Barbeiro profissional</span></span></label></div>
+<div class="pro-option"><input type="radio" id="caio" name="professional" value="Caio"><label for="caio"><span class="avatar">C</span><span><span class="pro-name">Caio</span><span class="pro-caption">Barbeiro profissional</span></span></label></div>
+</div><div id="availabilityNotice" class="notice" role="status">Alisson tem um período reservado para compromisso interno das 11h às 13h.</div></div>
+<h2 class="section-title"><span class="number">02</span> Escolha seu serviço</h2>
+<div class="form-group"><div class="services" id="services">
+<div class="service-option"><input type="radio" id="srv-social" name="service" value="Corte social" data-price="30" checked><label for="srv-social"><span class="service-name">Corte social</span><span class="service-price">R$ 30</span></label></div>
+<div class="service-option"><input type="radio" id="srv-degrade" name="service" value="Corte degradê" data-price="30"><label for="srv-degrade"><span class="service-name">Corte degradê</span><span class="service-price">R$ 30</span></label></div>
+<div class="service-option"><input type="radio" id="srv-social-barba" name="service" value="Corte social + barba" data-price="40"><label for="srv-social-barba"><span class="service-name">Corte social + barba</span><span class="service-price">R$ 40</span></label></div>
+<div class="service-option"><input type="radio" id="srv-degrade-barba" name="service" value="Corte degradê + barba" data-price="45"><label for="srv-degrade-barba"><span class="service-name">Corte degradê + barba</span><span class="service-price">R$ 45</span></label></div>
+<div class="service-option"><input type="radio" id="srv-barba" name="service" value="Barba normal" data-price="15"><label for="srv-barba"><span class="service-name">Barba normal</span><span class="service-price">R$ 15</span></label></div>
+<div class="service-option"><input type="radio" id="srv-barboterapia" name="service" value="Barboterapia" data-price="20"><label for="srv-barboterapia"><span class="service-name">Barboterapia</span><span class="service-price">R$ 20</span></label></div>
+<div class="service-option"><input type="radio" id="srv-sobrancelha" name="service" value="Sobrancelha" data-price="10"><label for="srv-sobrancelha"><span class="service-name">Sobrancelha</span><span class="service-price">R$ 10</span></label></div>
+<div class="service-option"><input type="radio" id="srv-pezinho" name="service" value="Pezinho" data-price="10"><label for="srv-pezinho"><span class="service-name">Pezinho</span><span class="service-price">R$ 10</span></label></div>
+</div></div>
+<h2 class="section-title"><span class="number">03</span> Data e horário</h2>
+<div class="form-group"><label class="field-label" for="date">Selecione a data</label><input type="date" id="date" required></div>
+<div class="slots-head"><span class="field-label">Horários disponíveis</span><div class="legend"><span><i class="dot"></i>Livre</span><span><i class="dot off"></i>Indisponível</span></div></div>
+<div id="slots" class="slots" aria-label="Horários disponíveis"></div>
+<div class="notice">Atendimento das 9h às 19h, com horários organizados em intervalos de 20 minutos. O último horário de início é às 16h40.</div>
+</section>
+<aside class="card summary"><div class="summary-top"><h2>Resumo do agendamento</h2><p>Confira os dados antes de confirmar sua solicitação.</p></div>
+<div class="summary-line"><span>Profissional</span><strong id="summaryProfessional">Alisson</strong></div><div class="summary-line"><span>Serviço</span><strong id="summaryService">Corte social</strong></div><div class="summary-line"><span>Valor</span><strong id="summaryPrice">R$ 30,00</strong></div><div class="summary-line"><span>Data</span><strong id="summaryDate" class="pending">Selecione uma data</strong></div><div class="summary-line"><span>Horário</span><strong id="summaryTime" class="pending">Selecione um horário</strong></div><div class="summary-line"><span>Cliente</span><strong id="summaryCustomer">Preencha seus dados</strong></div><div class="summary-line"><span>Telefone</span><strong id="summaryPhone">Preencha seus dados</strong></div><div class="summary-line"><span>Atendimento</span><strong>Corte / Barbearia</strong></div>
+<button type="button" class="submit" id="confirm" disabled>Solicitar agendamento</button><p class="fineprint">Seu pedido será enviado à CF Barbearia e aparecerá no painel administrativo como agendamento pendente.</p><div id="message" class="message" role="status" aria-live="polite"></div></aside>
+</main>
+<section class="card contact-card"><h2 class="section-title"><span class="number"><span aria-hidden="true">⌖</span></span> Visite a CF Barbearia</h2>
+<div class="contact-item"><span class="icon-wrap" aria-hidden="true">📍</span><div><strong>Endereço</strong><br>Rua João Antônio, 410 — Centro<br>Mirabela – MG</div></div>
+<div class="contact-item"><span class="icon-wrap" aria-hidden="true">☎</span><div><strong>Telefone / WhatsApp</strong><br><a href="https://wa.me/5538999406585" target="_blank" rel="noopener noreferrer">(38) 99940-6585 · Fale conosco pelo WhatsApp</a></div></div></section>
+<footer>© CF BARBEARIA • Cuidado em cada detalhe</footer>
+</div>
+<script>
+(() => {
+  // Use a mesma URL e a mesma chave pública (anon/publishable) configuradas no admin.html.
+  const SUPABASE_URL = "https://ankuotgjhxnbycmdwiwq.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_rumsXspq3my0TuW0Jy6Zeg_R8a_C0lV";
+
+  // CORREÇÃO: a validação não deve rejeitar a própria URL/chave configuradas.
+  const supabaseReady = Boolean(window.supabase) &&
+    SUPABASE_URL.startsWith('https://') &&
+    Boolean(SUPABASE_ANON_KEY);
+  const db = supabaseReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+  const dateInput=document.getElementById('date'), slotsContainer=document.getElementById('slots'), notice=document.getElementById('availabilityNotice');
+  const summaryProfessional=document.getElementById('summaryProfessional'), summaryService=document.getElementById('summaryService'), summaryPrice=document.getElementById('summaryPrice');
+  const summaryDate=document.getElementById('summaryDate'), summaryTime=document.getElementById('summaryTime'), summaryCustomer=document.getElementById('summaryCustomer'), summaryPhone=document.getElementById('summaryPhone');
+  const customerNameInput=document.getElementById('customerName'), customerPhoneInput=document.getElementById('customerPhone'), confirmButton=document.getElementById('confirm'), message=document.getElementById('message');
+  let selectedTime='', renderRequest=0, currentBookings=[], currentBlocks=[];
+  const today=new Date(), localToday=new Date(today.getTime()-today.getTimezoneOffset()*60000).toISOString().slice(0,10);
+  dateInput.min=localToday; dateInput.value=localToday;
+
+  function selectedProfessional(){return document.querySelector('input[name="professional"]:checked').value}
+  function selectedService(){const input=document.querySelector('input[name="service"]:checked');return{name:input.value,price:Number(input.dataset.price)}}
+  function formatTime(minutes){return String(Math.floor(minutes/60)).padStart(2,'0')+':'+String(minutes%60).padStart(2,'0')}
+  function formatDate(value){if(!value)return'Selecione uma data';const[year,month,day]=value.split('-');return`${day}/${month}/${year}`}
+  function formatPhone(value){const digits=value.replace(/\D/g,'').slice(0,11);if(digits.length<=2)return digits?`(${digits}`:'';if(digits.length<=7)return`(${digits.slice(0,2)}) ${digits.slice(2)}`;return digits.length<=10?`(${digits.slice(0,2)}) ${digits.slice(2,6)}-${digits.slice(6)}`:`(${digits.slice(0,2)}) ${digits.slice(2,7)}-${digits.slice(7)}`}
+  customerPhoneInput.addEventListener('input',()=>{const pos=customerPhoneInput.selectionStart;customerPhoneInput.value=formatPhone(customerPhoneInput.value);try{customerPhoneInput.setSelectionRange(pos,pos)}catch(_){}updateSummary()});
+  customerNameInput.addEventListener('input',updateSummary);
+
+  function baseUnavailable(professional,minutes){if(professional==='Alisson'&&minutes>=11*60&&minutes<13*60)return true;if(professional==='Caio'&&minutes>=12*60&&minutes<14*60)return true;return false}
+  function timeIsBlocked(professional,time,minutes){
+    if(baseUnavailable(professional,minutes))return true;
+    if(currentBookings.some(b=>b.booking_time&&String(b.booking_time).slice(0,5)===time&&!['cancelado','cancelada','canceled','cancelled'].includes(String(b.status||'').toLowerCase())))return true;
+    return currentBlocks.some(block=>{const scope=String(block.professional_scope||'').toLowerCase();if(scope&&scope!=='todos'&&scope!=='all'&&scope!==professional.toLowerCase())return false;if(block.all_day)return true;const start=block.start_time?String(block.start_time).slice(0,5):'',end=block.end_time?String(block.end_time).slice(0,5):'';return start&&end&&time>=start&&time<end})
+  }
+  async function loadAvailability(){
+    currentBookings=[];currentBlocks=[];if(!db||!dateInput.value)return;
+    const date=dateInput.value, professional=selectedProfessional();
+    const[bookingsResult,blocksResult]=await Promise.all([
+      db.from('bookings').select('booking_time,status').eq('booking_date',date).eq('professional',professional),
+      db.from('blocked_periods').select('professional_scope,start_date,end_date,start_time,end_time,all_day,reason,active').eq('active',true).lte('start_date',date).gte('end_date',date)
+    ]);
+    if(bookingsResult.error)throw bookingsResult.error;if(blocksResult.error)throw blocksResult.error;
+    currentBookings=bookingsResult.data||[];currentBlocks=blocksResult.data||[];
+  }
+  async function renderSlots(){
+    const request=++renderRequest,professional=selectedProfessional();slotsContainer.innerHTML='<div class="slots-empty">Consultando horários disponíveis...</div>';confirmButton.disabled=true;
+    try{
+      await loadAvailability();if(request!==renderRequest)return;
+      slotsContainer.innerHTML='';let selectedStillAvailable=false;
+      for(let minutes=9*60;minutes<19*60;minutes+=20){
+        const time=formatTime(minutes),unavailable=timeIsBlocked(professional,time,minutes),button=document.createElement('button');
+        button.type='button';button.className='slot'+(selectedTime===time&&!unavailable?' selected':'');button.textContent=time;button.disabled=unavailable;
+        button.setAttribute('aria-label',time+(unavailable?', indisponível':', disponível'));
+        if(selectedTime===time&&!unavailable)selectedStillAvailable=true;
+        button.addEventListener('click',()=>{selectedTime=time;message.className='message';message.textContent='';renderSlots()});slotsContainer.appendChild(button);
+      }
+      if(!selectedStillAvailable)selectedTime='';
+      notice.textContent=professional==='Alisson'?'Alisson tem um período reservado das 11h às 13h. Agendamentos e folgas cadastrados no sistema também bloqueiam os horários.':'Caio tem um período reservado das 12h às 14h. Agendamentos e folgas cadastrados no sistema também bloqueiam os horários.';
+      updateSummary();
+    }catch(error){
+      if(request!==renderRequest)return;slotsContainer.innerHTML='<div class="slots-empty">Não foi possível consultar a agenda. Verifique a conexão com o banco de dados.</div>';
+      currentBookings=[];currentBlocks=[];updateSummary();message.className='message show error';message.textContent='Não foi possível carregar os horários do sistema. Atualize a página ou tente novamente mais tarde.';
+      console.error('Erro ao carregar disponibilidade:',error);
+    }
+  }
+  function updateSummary(){
+    const professional=selectedProfessional(),service=selectedService();summaryProfessional.textContent=professional;summaryService.textContent=service.name;
+    summaryPrice.textContent=service.price.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});summaryDate.textContent=formatDate(dateInput.value);
+    summaryTime.textContent=selectedTime||'Selecione um horário';summaryDate.classList.toggle('pending',!dateInput.value);summaryTime.classList.toggle('pending',!selectedTime);
+    summaryCustomer.textContent=customerNameInput.value.trim()||'Preencha seus dados';summaryPhone.textContent=customerPhoneInput.value.trim()||'Preencha seus dados';
+    const digits=customerPhoneInput.value.replace(/\D/g,'');confirmButton.disabled=!(dateInput.value&&selectedTime&&customerNameInput.value.trim()&&digits.length>=10&&db);
+  }
+  document.querySelectorAll('input[name="service"]').forEach(input=>input.addEventListener('change',()=>{message.className='message';message.textContent='';updateSummary()}));
+  document.querySelectorAll('input[name="professional"]').forEach(input=>input.addEventListener('change',()=>{selectedTime='';message.className='message';message.textContent='';renderSlots()}));
+  dateInput.addEventListener('change',()=>{selectedTime='';message.className='message';message.textContent='';renderSlots()});
+
+  confirmButton.addEventListener('click',async()=>{
+    if(!db){message.className='message show error';message.textContent='O banco de dados ainda não está configurado nesta página. Insira a mesma URL e a chave pública usadas no admin.html.';return}
+    const customerName=customerNameInput.value.trim(),phone=customerPhoneInput.value.trim(),digits=phone.replace(/\D/g,'');
+    if(!customerName||digits.length<10||!dateInput.value||!selectedTime){message.className='message show error';message.textContent='Preencha seu nome, telefone, data e horário antes de solicitar o agendamento.';return}
+    confirmButton.disabled=true;confirmButton.textContent='Enviando solicitação...';message.className='message';message.textContent='';
+    const service=selectedService(),professional=selectedProfessional(),bookingTime=selectedTime;
+    const payload={customer_name:customerName,phone,professional,service:service.name,price:service.price,booking_date:dateInput.value,booking_time:bookingTime,status:'pendente',notes:'',source:'site'};
+    try{
+      await loadAvailability();const selectedMinutes=Number(bookingTime.slice(0,2))*60+Number(bookingTime.slice(3,5));
+      if(timeIsBlocked(professional,bookingTime,selectedMinutes)){selectedTime='';await renderSlots();throw new Error('Esse horário acabou de ficar indisponível. Escolha outro horário.')}
+      const{error}=await db.from('bookings').insert(payload);if(error)throw error;
+      message.className='message show success';message.textContent=`Solicitação enviada! ${customerName}, seu pedido para ${formatDate(dateInput.value)} às ${bookingTime} foi registrado e aparecerá no painel administrativo como pendente. Aguarde a confirmação da barbearia.`;
+      selectedTime='';await renderSlots();
+    }catch(error){
+      console.error('Erro ao enviar agendamento:',error);message.className='message show error';
+      message.textContent=error.message&&error.message.includes('indisponível')?error.message:'Não foi possível enviar o agendamento. Confira a conexão com o banco e tente novamente.';
+    }finally{confirmButton.textContent='Solicitar agendamento';updateSummary()}
+  });
+  if(!db){notice.textContent='Para ativar os agendamentos, configure nesta página a mesma URL e chave pública do Supabase usadas no painel administrativo.';message.className='message show error';message.textContent='Banco de dados não configurado nesta página. Os horários não serão enviados até configurar as credenciais.'}
+  renderSlots();
+})();
+</script>
+</body>
+</html>
